@@ -74,22 +74,36 @@ export const SalonDetailScreen: React.FC<SalonDetailScreenProps> = ({
 
           {/* 4 Action Buttons */}
           <div className="grid grid-cols-4 gap-2 text-center">
-            {/* Site Web */}
+            {/* WhatsApp Contact & Paiement */}
             <button
-              onClick={() => onActionToast?.('Ouverture du site web...')}
+              onClick={() => {
+                const phoneDigits = salon.phone.replace(/\D/g, '') || '221778627052';
+                const msg = encodeURIComponent(`*Bonjour ${salon.name} !* 👋\nJe vous contacte via FOTOLOU pour une prise de contact, une réservation ou un paiement.`);
+                window.open(`https://wa.me/${phoneDigits}?text=${msg}`, '_blank');
+                onActionToast?.(`Ouverture de WhatsApp avec ${salon.name}...`);
+              }}
               className="flex flex-col items-center gap-1.5 group cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#F4F7FE] group-hover:bg-[#4318FF]/10 text-[#4318FF] flex items-center justify-center transition-colors">
-                <Globe className="w-5 h-5" />
+              <div className="w-12 h-12 rounded-2xl bg-[#25D366]/15 group-hover:bg-[#25D366]/25 text-[#25D366] flex items-center justify-center transition-colors shadow-xs">
+                <svg
+                  className="w-6 h-6 fill-[#25D366]"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.23 8.23 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.42 1.01 2.59c.13.17 1.75 2.67 4.24 3.75.59.26 1.05.41 1.41.53.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.11-.22-.17-.47-.3" />
+                </svg>
               </div>
-              <span className="text-[11px] font-medium text-slate-600">
-                Site Web
+              <span className="text-[11px] font-bold text-[#128C7E]">
+                WhatsApp
               </span>
             </button>
 
             {/* Appeler */}
             <button
-              onClick={() => onActionToast?.(`Appel vers ${salon.phone}...`)}
+              onClick={() => {
+                window.open(`tel:${salon.phone}`);
+                onActionToast?.(`Appel vers ${salon.phone}...`);
+              }}
               className="flex flex-col items-center gap-1.5 group cursor-pointer"
             >
               <div className="w-12 h-12 rounded-2xl bg-[#F4F7FE] group-hover:bg-[#4318FF]/10 text-[#4318FF] flex items-center justify-center transition-colors">
@@ -102,7 +116,13 @@ export const SalonDetailScreen: React.FC<SalonDetailScreenProps> = ({
 
             {/* Direction */}
             <button
-              onClick={() => onActionToast?.(`Itinéraire vers ${salon.location}...`)}
+              onClick={() => {
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  salon.name + ' ' + salon.location
+                )}`;
+                window.open(mapUrl, '_blank');
+                onActionToast?.(`Itinéraire vers ${salon.location}...`);
+              }}
               className="flex flex-col items-center gap-1.5 group cursor-pointer"
             >
               <div className="w-12 h-12 rounded-2xl bg-[#F4F7FE] group-hover:bg-[#4318FF]/10 text-[#4318FF] flex items-center justify-center transition-colors">
@@ -115,7 +135,18 @@ export const SalonDetailScreen: React.FC<SalonDetailScreenProps> = ({
 
             {/* Partager */}
             <button
-              onClick={() => onActionToast?.('Lien du salon copié dans le presse-papier !')}
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: salon.name,
+                    text: `Découvrez ${salon.name} sur Fotolou !`,
+                    url: window.location.href,
+                  }).catch(() => {});
+                } else {
+                  navigator.clipboard?.writeText(window.location.href);
+                  onActionToast?.('Lien du salon copié dans le presse-papier !');
+                }
+              }}
               className="flex flex-col items-center gap-1.5 group cursor-pointer"
             >
               <div className="w-12 h-12 rounded-2xl bg-[#F4F7FE] group-hover:bg-[#4318FF]/10 text-[#4318FF] flex items-center justify-center transition-colors">

@@ -95,8 +95,8 @@ export const ClientProfileScreen: React.FC<ClientProfileScreenProps> = ({
             className="w-full p-4 rounded-2xl bg-gradient-to-r from-[#F4F7FE] to-[#EDE9FE] border border-[#4318FF]/20 hover:border-[#4318FF]/50 shadow-xs flex items-center justify-between transition-all cursor-pointer group active:scale-[0.99]"
           >
             <div className="flex items-center gap-3.5">
-              <div className="w-8 h-8 rounded-xl bg-[#4318FF] text-white flex items-center justify-center shadow-xs">
-                <Download className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-xs border border-white/40 shrink-0">
+                <img src="/icon.svg" alt="Fotolou" className="w-full h-full object-cover" />
               </div>
               <div className="text-left">
                 <span className="text-xs sm:text-sm font-black text-slate-900 block group-hover:text-[#4318FF] transition-colors">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FotolouLogo } from '../../../shared/ui/FotolouLogo';
 
 interface LoginScreenProps {
   onContinue: (phoneNumber: string) => void;
@@ -23,6 +24,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <div className="relative w-full h-full bg-white text-slate-900 flex flex-col justify-between p-5 sm:p-6 select-none max-w-md mx-auto overflow-hidden">
+      {/* Top Brand Logo */}
+      <div className="pt-2 pb-1 flex items-center justify-center">
+        <FotolouLogo variant="colored" size="md" showTagline />
+      </div>
+
       {/* Main Content */}
       <div className="my-auto space-y-4 sm:space-y-5">
         <div>

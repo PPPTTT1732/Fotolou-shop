@@ -1,6 +1,7 @@
 import React from 'react';
 import { Smartphone } from 'lucide-react';
 import { AppScreen } from '../hooks/useAuthFlow';
+import { FotolouLogo } from '../../../shared/ui/FotolouLogo';
 
 interface AuthHeaderProps {
   screen: AppScreen;
@@ -30,18 +31,7 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
     <header className="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#4318FF] flex items-center justify-center text-white font-black text-sm shadow-md">
-            F
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-sm text-white">FOTOLOU</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#4318FF]/20 text-[#8165FF] border border-[#4318FF]/40">
-                Figma 1:1
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">Moins d'attente. Plus de temps.</p>
-          </div>
+          <FotolouLogo variant="white" size="sm" showTagline={true} />
         </div>
 
         <div className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto max-w-full">

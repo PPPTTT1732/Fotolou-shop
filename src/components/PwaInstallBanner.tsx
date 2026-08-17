@@ -22,8 +22,8 @@ export const PwaInstallBanner: React.FC = () => {
       {isInstallable && !showIOSPrompt && (
         <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md bg-slate-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-2xl border border-slate-700/50 flex items-center justify-between gap-3 animate-fade-in">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-[#4318FF] flex items-center justify-center text-white shrink-0 shadow-xs">
-              <Download className="w-5 h-5" />
+            <div className="w-11 h-11 rounded-2xl overflow-hidden shadow-md shrink-0 border border-white/20">
+              <img src="/icon.svg" alt="Fotolou" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
               <h4 className="text-xs font-black text-white truncate">Installer l'application Fotolou</h4>
@@ -55,11 +55,11 @@ export const PwaInstallBanner: React.FC = () => {
           <div className="w-full max-w-sm bg-white rounded-3xl p-6 text-slate-900 shadow-2xl space-y-5 animate-scale-up">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#4318FF] text-white flex items-center justify-center">
-                  <Smartphone className="w-5 h-5" />
+                <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-md shrink-0 border border-slate-100">
+                  <img src="/icon.svg" alt="Fotolou" className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-slate-900">Installer sur iPhone / iPad</h3>
+                  <h3 className="text-sm font-black text-slate-900">Installer Fotolou</h3>
                   <p className="text-xs text-slate-500">Ajouter à l'écran d'accueil</p>
                 </div>
               </div>
