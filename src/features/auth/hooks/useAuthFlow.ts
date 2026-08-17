@@ -13,7 +13,7 @@ export type AppScreen =
   | 'profile';
 
 export function useAuthFlow() {
-  const [screen, setScreen] = useState<AppScreen>('splash');
+  const [screen, setScreen] = useState<AppScreen>('login');
   const [phoneNumber, setPhoneNumber] = useState('+221 70 123 45 67');
   const [activeTicket, setActiveTicket] = useState<VirtualTicket | null>({
     id: 'fl-tk-042',

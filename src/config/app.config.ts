@@ -1,19 +1,28 @@
 export const APP_CONFIG = {
   name: 'FOTOLOU',
-  fullName: 'FOTOLOU Photography & Studio',
-  tagline: 'L’excellence photographique & gestion de séances',
+  fullName: 'Fotolou - Barber & Salon',
+  tagline: 'Moins d’attente. Plus de temps.',
   version: '2.4.0',
-  currency: 'EUR',
-  currencySymbol: '€',
-  locale: 'fr-FR',
+  currency: 'FCFA',
+  currencySymbol: 'FCFA',
+  locale: 'fr-SN',
   studio: {
-    address: '14 Rue de la Création, Studio 3B, 75011 Paris',
-    phone: '+33 1 42 68 90 20',
-    email: 'contact@fotolou-studio.com',
-    openingHours: 'Mar - Sam: 09h00 - 19h30',
+    address: 'Rue MZ 45, Mermoz, Dakar, Sénégal',
+    phone: '+221 77 862 70 52',
+    email: 'contact@fotolou.sn',
+    openingHours: 'Lun - Sam: 09h00 - 21h00',
+  },
+  support: {
+    phone: '+221 77 862 70 52',
+    whatsapp: '+221 77 862 70 52',
+    city: 'Dakar, Sénégal',
+  },
+  api: {
+    baseUrl: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL) || '/api',
+    timeoutMs: 10000,
   },
   pwa: {
-    storagePrefix: 'fotolou_app_v1_',
-    syncIntervalMs: 15000,
-  }
+    storagePrefix: 'fotolou_app_v2_',
+    syncIntervalMs: 10000,
+  },
 } as const;

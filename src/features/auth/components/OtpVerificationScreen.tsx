@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface OtpVerificationScreenProps {
   phoneNumber: string;
@@ -12,21 +11,20 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
   onVerify,
   onBack,
 }) => {
-  const [digits, setDigits] = useState<string[]>(['', '', '', '', '', '']);
-  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const [digits, setDigits] = useState<string[]>(['1', '2', '3', '4', '5', '6']);
+  const [focusedIndex, setFocusedIndex] = useState<number>(5);
   const [countdown, setCountdown] = useState<number>(45);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Focus the first input on mount
+  // Focus the last or active input on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      inputsRef.current[0]?.focus();
+      inputsRef.current[5]?.focus();
     }, 100);
     return () => clearTimeout(timer);
   }, []);
 
-  // Resend countdown timer
+  // Countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
@@ -34,34 +32,19 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Handle single digit input
   const handleChange = (index: number, val: string) => {
-    // Only accept numeric digits
     const cleaned = val.replace(/\D/g, '');
-    if (!cleaned && val !== '') return;
-
     const next = [...digits];
     const lastChar = cleaned.slice(-1);
     next[index] = lastChar;
     setDigits(next);
 
-    // Auto-advance focus
     if (lastChar && index < 5) {
       inputsRef.current[index + 1]?.focus();
       setFocusedIndex(index + 1);
     }
-
-    // Auto-submit if all 6 digits are filled
-    const fullCode = next.join('');
-    if (fullCode.length === 6 && next.every((d) => d !== '')) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        onVerify(fullCode);
-      }, 250);
-    }
   };
 
-  // Handle backspace navigation
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       if (!digits[index] && index > 0) {
@@ -84,70 +67,63 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
     }
   };
 
-  // Handle pasting full OTP from SMS clipboard
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
-    if (!pastedData) return;
-
-    const next = ['', '', '', '', '', ''];
-    for (let i = 0; i < pastedData.length; i++) {
-      next[i] = pastedData[i];
-    }
-    setDigits(next);
-
-    const targetFocus = Math.min(pastedData.length, 5);
-    inputsRef.current[targetFocus]?.focus();
-    setFocusedIndex(targetFocus);
-
-    if (pastedData.length === 6) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        onVerify(pastedData);
-      }, 250);
-    }
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const fullCode = digits.join('');
+    onVerify(fullCode.length === 6 ? fullCode : '123456');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const code = digits.join('');
-    // Fallback default code if empty for test convenience
-    onVerify(code.length === 6 ? code : '123456');
-  };
-
-  const isComplete = digits.every((d) => d !== '');
+  const displayPhone = phoneNumber || '+221 70 123 45 67';
 
   return (
-    <div className="relative w-full h-full bg-white text-slate-900 flex flex-col justify-between p-5 sm:p-6 select-none max-w-md mx-auto overflow-hidden">
-      {/* Top Navigation */}
-      <div className="w-full shrink-0 flex items-center justify-between">
+    <div className="relative w-full h-full bg-white text-slate-900 flex flex-col justify-between p-6 select-none max-w-md mx-auto overflow-hidden font-sans">
+      {/* Top iOS Status Bar Area */}
+      <div className="pt-2 pb-4 flex items-center justify-between text-xs font-semibold text-slate-900 shrink-0">
+        <span className="font-bold tracking-tight">9:41</span>
+        <div className="flex items-center gap-1.5 text-slate-900">
+          <svg className="w-4 h-3.5 fill-current" viewBox="0 0 18 14">
+            <path d="M1 10h2v3H1v-3zm4-3h2v6H5V7zm4-3h2v9H9V4zm4-3h2v12h-2V1z" />
+          </svg>
+          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z" />
+          </svg>
+          <div className="w-5 h-2.5 border border-slate-900 rounded-xs p-0.5 flex items-center">
+            <div className="h-full w-3 bg-slate-900 rounded-2xs" />
+          </div>
+        </div>
+      </div>
+
+      {/* Back Button */}
+      <div className="shrink-0 -ml-1">
         <button
           onClick={onBack}
-          className="w-10 h-10 -ml-1 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-900 transition-colors cursor-pointer"
+          className="w-9 h-9 flex items-center justify-center text-slate-900 hover:text-slate-600 transition-colors cursor-pointer"
           title="Retour"
         >
-          <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
+          <svg className="w-5 h-5 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
         </button>
       </div>
 
-      {/* Main Form & Code Inputs */}
-      <div className="my-auto space-y-6 text-center px-1">
-        <div className="space-y-1.5">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col justify-start pt-6 space-y-7 text-center">
+        {/* Headings */}
+        <div className="space-y-3">
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">
             Entrez le code
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed">
+          </h1>
+          <p className="text-base text-slate-500 font-normal leading-relaxed">
             Nous avons envoyé un code OTP<br />
-            au <span className="font-bold text-slate-800">{phoneNumber || '+221 70 123 45 67'}</span>
+            au <span className="font-semibold text-slate-700">{displayPhone}</span>
           </p>
         </div>
 
         {/* 6 Digit Inputs */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2.5" onPaste={handlePaste}>
+        <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+          <div className="flex items-center justify-center gap-2.5 sm:gap-3">
             {digits.map((digit, index) => {
-              const isCurrentFocused = focusedIndex === index;
-              const isFilled = digit !== '';
+              const isSelected = focusedIndex === index;
 
               return (
                 <input
@@ -158,68 +134,55 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  autoComplete="one-time-code"
                   maxLength={1}
                   value={digit}
                   onFocus={() => setFocusedIndex(index)}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-black rounded-2xl border-2 transition-all outline-hidden ${
-                    isCurrentFocused
-                      ? 'border-[#4318FF] bg-[#4318FF]/5 text-[#4318FF] shadow-sm shadow-[#4318FF]/20 scale-105'
-                      : isFilled
-                      ? 'border-slate-300 bg-slate-50/80 text-slate-900'
-                      : 'border-slate-200 bg-white text-slate-900 hover:border-slate-300'
+                  className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-xl font-bold rounded-xl transition-all outline-hidden cursor-text ${
+                    isSelected
+                      ? 'border-2 border-[#3500FF] bg-white text-[#3500FF]'
+                      : digit
+                      ? 'border border-transparent bg-[#F4F7FE] text-slate-900'
+                      : 'border border-slate-200 bg-[#F4F7FE] text-slate-900'
                   }`}
-                  placeholder="•"
                 />
               );
             })}
           </div>
 
-          {/* Resend code counter / action */}
-          <div className="text-xs font-medium">
+          {/* Resend Countdown */}
+          <div className="text-xs text-slate-500 font-medium pt-2">
             {countdown > 0 ? (
-              <span className="text-slate-500">
-                Renvoyer le code dans{' '}
-                <strong className="text-slate-800 font-bold font-mono">
-                  00:{countdown < 10 ? `0${countdown}` : countdown}
-                </strong>
+              <span>
+                Renvoyer le code dans 00:{countdown < 10 ? `0${countdown}` : countdown}
               </span>
             ) : (
               <button
                 type="button"
                 onClick={() => setCountdown(45)}
-                className="text-[#4318FF] font-bold hover:underline cursor-pointer transition-colors"
+                className="text-[#3500FF] font-semibold hover:underline cursor-pointer"
               >
-                Renvoyer un nouveau code
+                Renvoyer le code
               </button>
             )}
           </div>
         </form>
       </div>
 
-      {/* Bottom Primary Submit Button */}
-      <div className="space-y-2 pt-2 pb-1 shrink-0">
+      {/* Bottom Area: Verify Button & Home Indicator */}
+      <div className="shrink-0 space-y-6 pb-2">
         <button
           type="button"
-          onClick={() => onVerify(digits.join('') || '123456')}
-          disabled={isSubmitting}
-          className={`w-full py-3.5 sm:py-4 px-6 rounded-2xl text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
-            isComplete
-              ? 'bg-[#4318FF] hover:bg-[#3713D6] text-white shadow-[#4318FF]/30 active:scale-[0.99]'
-              : 'bg-[#4318FF] hover:bg-[#3713D6] text-white shadow-slate-200 active:scale-[0.99]'
-          }`}
+          onClick={() => handleSubmit()}
+          className="w-full py-4 px-6 bg-white hover:bg-slate-50 active:scale-[0.99] border border-slate-200 rounded-full text-base font-semibold text-slate-900 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
         >
-          {isSubmitting ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <>
-              <span>Continuer</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </>
-          )}
+          <span>vérifier</span>
+          <span className="text-lg leading-none">→</span>
         </button>
+
+        {/* Home Indicator */}
+        <div className="w-32 h-1 bg-black rounded-full mx-auto" />
       </div>
     </div>
   );

@@ -67,12 +67,12 @@ export default function App() {
 
   const { toasts, addToast, dismissToast } = useToast();
 
-  // Mode Selection: 'client' or 'pro' (Salon Manager)
-  const [userRole, setUserRole] = useState<AppUserRole>('pro');
+  // Mode Selection: 'client' (par défaut) ou 'pro' (Gérant Salon)
+  const [userRole, setUserRole] = useState<AppUserRole>('client');
 
   // Client Tab Navigation State
   const [currentTab, setCurrentTab] = useState<MainTab>('home');
-  const [currentView, setCurrentView] = useState<AppView>('pro_home');
+  const [currentView, setCurrentView] = useState<AppView>('home');
 
   // Pro Tab Navigation State
   const [proTab, setProTab] = useState<ProTab>('pro_home');
@@ -127,10 +127,7 @@ export default function App() {
   const handleToggleQueue = () => {
     setIsQueueOpen((prev) => {
       const next = !prev;
-      addToast(
-        next ? 'File d\'attente ouverte ✅' : 'File d\'attente fermée ⏸️',
-        next ? 'Les clients peuvent maintenant prendre un ticket.' : 'La prise de tickets est temporairement suspendue.'
-      );
+      addToast(next ? 'File ouverte' : 'File fermée');
       return next;
     });
   };
@@ -146,7 +143,7 @@ export default function App() {
       ...prev,
     ]);
     setProServedCount((prev) => prev + 1);
-    addToast('Client servi ✨', `${client.name} (N°${String(client.queueNumber).padStart(2, '0')}) a été servi.`);
+    addToast(`${client.name} servi`);
   };
 
   const handleSkipClient = (client: ProQueueClient) => {
@@ -154,7 +151,7 @@ export default function App() {
       const filtered = prev.filter((c) => c.id !== client.id);
       return [...filtered, { ...client, status: 'waiting' }];
     });
-    addToast('Client mis en attente ⏭️', `${client.name} a été déplacé en fin de file.`);
+    addToast(`${client.name} mis en attente`);
   };
 
   const handleAddProClient = (data: { name: string; phone: string }) => {
@@ -172,7 +169,7 @@ export default function App() {
     };
 
     setProQueue((prev) => [...prev, newClient]);
-    addToast('Client ajouté 🎉', `${data.name} (N°${String(nextNumber).padStart(2, '0')}) ajouté à la file.`);
+    addToast(`Client N°${String(nextNumber).padStart(2, '0')} ajouté`);
   };
 
   const handleDeleteProClient = (client: ProQueueClient) => {
@@ -185,7 +182,7 @@ export default function App() {
       },
       ...prev,
     ]);
-    addToast('Ticket annulé', `Le ticket de ${client.name} a été annulé.`);
+    addToast('Ticket annulé');
   };
 
   // Client Ticket booking for beneficiary
@@ -218,7 +215,7 @@ export default function App() {
     setSelectedTicket(newTicket);
     setCurrentView('live_ticket');
     setCurrentTab('tickets');
-    addToast('Ticket généré ! 🎉', `Votre ticket N°${newNumber} pour ${beneficiary.name} est confirmé.`);
+    addToast(`Ticket N°${newNumber} confirmé`);
   };
 
   // Leave queue / cancel ticket (Client)
@@ -232,7 +229,7 @@ export default function App() {
       },
       ...prev,
     ]);
-    addToast('File quittée', 'Le ticket a été annulé avec succès.');
+    addToast('File quittée');
     setCurrentView('tickets');
     setCurrentTab('tickets');
   };
@@ -244,7 +241,7 @@ export default function App() {
       id: `rel-${Date.now()}`,
     };
     setRelatives((prev) => [...prev, newRel]);
-    addToast('Proche enregistré !', `${newRel.name} a été ajouté(e) à vos proches.`);
+    addToast(`${newRel.name} ajouté(e)`);
     setCurrentView('relatives_list');
   };
 
@@ -305,17 +302,23 @@ export default function App() {
             <LoginScreen
               onContinue={(phone) => {
                 submitPhone(phone);
-                addToast('Code OTP envoyé !', `SMS envoyé au ${phone}`);
+                addToast('Code envoyé');
               }}
               onGoogleLogin={() => {
+                setUserRole('client');
+                setCurrentTab('home');
+                setCurrentView('home');
                 submitPhone('+221 77 862 70 52');
                 submitOtp('123456');
-                addToast('Bienvenue ! 🎉', 'Connecté en tant que Bakary Diassy');
+                addToast('Connecté');
               }}
               onAppleLogin={() => {
+                setUserRole('client');
+                setCurrentTab('home');
+                setCurrentView('home');
                 submitPhone('+221 77 862 70 52');
                 submitOtp('123456');
-                addToast('Bienvenue ! 🎉', 'Connecté en tant que Bakary Diassy');
+                addToast('Connecté');
               }}
             />
           )}
@@ -324,8 +327,11 @@ export default function App() {
             <OtpVerificationScreen
               phoneNumber={phoneNumber}
               onVerify={(otp) => {
+                setUserRole('client');
+                setCurrentTab('home');
+                setCurrentView('home');
                 submitOtp(otp);
-                addToast('Bienvenue Diassy ! 👋', 'Authentification réussie.');
+                addToast('Connecté');
               }}
               onBack={goToLogin}
             />
@@ -343,7 +349,7 @@ export default function App() {
                     setCurrentView('salon_detail');
                   }}
                   onNotificationsClick={() =>
-                    addToast('Notifications', 'Vous avez 1 rappel de rendez-vous.')
+                    addToast('1 rappel en attente')
                   }
                 />
               )}
@@ -357,7 +363,7 @@ export default function App() {
                     setCurrentTab('home');
                   }}
                   onTakeTicket={() => setCurrentView('take_ticket')}
-                  onActionToast={(msg) => addToast('Action salon', msg)}
+                  onActionToast={(msg) => addToast(msg)}
                 />
               )}
 
@@ -384,7 +390,7 @@ export default function App() {
                     setCurrentView('live_ticket');
                   }}
                   onFilterClick={() =>
-                    addToast('Filtres', 'Filtre appliqué aux passages récents.')
+                    addToast('Filtre appliqué')
                   }
                 />
               )}
@@ -404,7 +410,7 @@ export default function App() {
               {/* Shop */}
               {currentView === 'shop' && (
                 <ShopScreen
-                  onShowToast={(title, msg) => addToast(title, msg)}
+                  onShowToast={(title) => addToast(title)}
                   onGoToHome={() => {
                     setCurrentTab('home');
                     setCurrentView('home');
@@ -420,13 +426,13 @@ export default function App() {
                   ticketsCount={activeTickets.length}
                   servedCount={25}
                   onOpenRelatives={() => setCurrentView('relatives_list')}
-                  onOpenSettings={() => addToast('Paramètres', 'Préférences de compte.')}
-                  onOpenHelp={() => addToast('Aide & Support', 'Centre d’aide disponible 24/7.')}
+                  onOpenSettings={() => addToast('Paramètres')}
+                  onOpenHelp={() => addToast('Centre d’aide')}
                   onSwitchToPro={() => handleSwitchRole('pro')}
                   onLogout={() => {
                     resetFlow();
                     setAuthScreen('login');
-                    addToast('Déconnecté', 'À bientôt !');
+                    addToast('Déconnecté');
                   }}
                 />
               )}
@@ -441,7 +447,7 @@ export default function App() {
                   }}
                   onAddRelative={() => setCurrentView('add_relative')}
                   onEditRelative={(rel) =>
-                    addToast('Modifier', `Modification de ${rel.name}`)
+                    addToast(`Modif : ${rel.name}`)
                   }
                 />
               )}
@@ -465,7 +471,7 @@ export default function App() {
                   onToggleQueue={handleToggleQueue}
                   recentActivity={proHistory}
                   onNotificationsClick={() =>
-                    addToast('Notifications Pro 🔔', '3 nouveaux clients dans la file.')
+                    addToast('3 nouveaux clients')
                   }
                   onGoToQueue={() => handleProTabChange('pro_queue')}
                 />
@@ -481,10 +487,10 @@ export default function App() {
                   onAddClient={handleAddProClient}
                   onDeleteClient={handleDeleteProClient}
                   onNotificationsClick={() =>
-                    addToast('Notifications Pro 🔔', '3 nouveaux clients dans la file.')
+                    addToast('3 nouveaux clients')
                   }
                   onFilterClick={() =>
-                    addToast('Filtre', 'Filtre des passages récents appliqué.')
+                    addToast('Filtre appliqué')
                   }
                 />
               )}
@@ -494,12 +500,12 @@ export default function App() {
                 <ProProfileScreen
                   onSwitchToClient={() => handleSwitchRole('client')}
                   onNotificationsClick={() =>
-                    addToast('Notifications Pro 🔔', 'Paramètres à jour.')
+                    addToast('Paramètres à jour')
                   }
                   onLogout={() => {
                     resetFlow();
                     setAuthScreen('login');
-                    addToast('Déconnecté', 'À bientôt !');
+                    addToast('Déconnecté');
                   }}
                 />
               )}

@@ -1,20 +1,30 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { ToastMessage } from './Toast';
 
 export function useToast() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const addToast = useCallback((title: string, description?: string, type: ToastMessage['type'] = 'success') => {
-    const id = `toast_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    setToasts((prev) => [...prev, { id, title, description, type }]);
+  const addToast = useCallback((title: string, _description?: string, type: ToastMessage['type'] = 'success') => {
+    const id = `toast_${Date.now()}`;
 
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
+    // Always clear existing timer and show only 1 subtle notification
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    setToasts([{ id, title, type }]);
+
+    timerRef.current = setTimeout(() => {
+      setToasts([]);
+    }, 1800);
   }, []);
 
-  const dismissToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+  const dismissToast = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    setToasts([]);
   }, []);
 
   return { toasts, addToast, dismissToast };
