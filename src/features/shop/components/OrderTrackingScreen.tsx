@@ -117,13 +117,13 @@ export const OrderTrackingScreen: React.FC<OrderTrackingScreenProps> = ({
           onClick={
             onContactSupport ||
             (() => {
-              window.open('tel:+221778627052');
+              window.open('https://wa.me/221778627052?text=Bonjour%20FOTOLOU%20!%20Je%20souhaite%20des%20informations%20sur%20ma%20commande.', '_blank');
             })
           }
-          className="w-full py-3.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.99] border border-slate-200 text-slate-900 text-xs sm:text-sm font-black transition-all cursor-pointer text-center flex items-center justify-center gap-2"
+          className="w-full py-3.5 rounded-2xl bg-[#25D366]/10 hover:bg-[#25D366]/20 active:scale-[0.99] border border-[#25D366]/30 text-[#128C7E] text-xs sm:text-sm font-black transition-all cursor-pointer text-center flex items-center justify-center gap-2"
         >
-          <MessageSquare className="w-4 h-4 text-slate-700" />
-          <span>Contacter FOTOLOU</span>
+          <MessageSquare className="w-4 h-4 text-[#128C7E]" />
+          <span>Contacter FOTOLOU sur WhatsApp</span>
         </button>
       </div>
     </div>

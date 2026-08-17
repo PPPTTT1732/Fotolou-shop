@@ -32,6 +32,7 @@ import {
 import { Salon, Relative, SalonTicket, ProQueueClient, AppUserRole } from './types/salon';
 import { useToast } from './shared/feedback/useToast';
 import { ToastContainer } from './shared/feedback/Toast';
+import { PwaInstallBanner } from './components/PwaInstallBanner';
 import { Repeat } from 'lucide-react';
 
 export type AppView =
@@ -524,6 +525,7 @@ export default function App() {
         )}
       </div>
 
+      <PwaInstallBanner />
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </div>
   );

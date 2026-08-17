@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="fotolou-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4318FF"/>
+      <stop offset="100%" stop-color="#7B2CBF"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#fotolou-grad)"/>
+  <!-- App emblem: Scissors + Comb / Stylized Barber + Star -->
+  <g filter="url(#shadow)" fill="#FFFFFF">
+    <circle cx="256" cy="180" r="48" fill="#FFFFFF" opacity="0.95"/>
+    <path d="M190 280 C190 240, 322 240, 322 280 C322 340, 190 340, 190 280 Z" fill="#FFBA08"/>
+    <!-- Stylized F / Ticket Motif -->
+    <path d="M170 330 Q256 360 342 330 Q342 380 256 420 Q170 380 170 330 Z" fill="#FFFFFF"/>
+    <circle cx="340" cy="160" r="18" fill="#FFBA08"/>
+    <circle cx="172" cy="160" r="14" fill="#05CD99"/>
+  </g>
+</svg>

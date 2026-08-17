@@ -26,7 +26,7 @@ export interface ShopOrder {
   delivery: number;
   discount: number;
   total: number;
-  paymentMethod: 'wave' | 'orange_money';
+  paymentMethod: 'whatsapp' | 'wave' | 'orange_money';
   status: 'payment_received' | 'in_delivery' | 'delivered';
   timeline: {
     title: string;

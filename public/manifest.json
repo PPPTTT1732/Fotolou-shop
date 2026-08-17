@@ -1,0 +1,61 @@
+{
+  "name": "Fotolou - Barber & Salon",
+  "short_name": "Fotolou",
+  "description": "Application mobile PWA de réservation, file d'attente intelligente et boutique pour salons de coiffure.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
+  "background_color": "#0c0a09",
+  "theme_color": "#4318FF",
+  "orientation": "portrait",
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["lifestyle", "business", "shopping", "utilities"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Fotolou - Application Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "File d'attente",
+      "short_name": "Tickets",
+      "description": "Consulter mon ticket en temps réel",
+      "url": "/?tab=tickets",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Boutique",
+      "short_name": "Shop",
+      "description": "Découvrir la boutique Fotolou",
+      "url": "/?tab=shop",
+      "icons": [{ "src": "/icon.svg", "sizes": "192x192" }]
+    }
+  ]
+}

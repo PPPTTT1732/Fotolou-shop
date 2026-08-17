@@ -1,5 +1,6 @@
-import React from 'react';
-import { Users, Settings, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, Settings, HelpCircle, LogOut, ChevronRight, Download, Smartphone } from 'lucide-react';
+import { usePwaInstall } from '../../../hooks/usePwaInstall';
 
 interface ClientProfileScreenProps {
   phoneNumber?: string;
@@ -24,6 +25,8 @@ export const ClientProfileScreen: React.FC<ClientProfileScreenProps> = ({
   onLogout,
   onSwitchToPro,
 }) => {
+  const { isInstallable, isInstalled, triggerInstall } = usePwaInstall();
+
   return (
     <div className="w-full h-full bg-white flex flex-col justify-between overflow-hidden text-slate-900">
       {/* Scrollable Content */}
@@ -84,6 +87,27 @@ export const ClientProfileScreen: React.FC<ClientProfileScreenProps> = ({
               </span>
             </div>
             <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-[#4318FF] transition-colors" />
+          </button>
+
+          {/* Installer l'application PWA */}
+          <button
+            onClick={triggerInstall}
+            className="w-full p-4 rounded-2xl bg-gradient-to-r from-[#F4F7FE] to-[#EDE9FE] border border-[#4318FF]/20 hover:border-[#4318FF]/50 shadow-xs flex items-center justify-between transition-all cursor-pointer group active:scale-[0.99]"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="w-8 h-8 rounded-xl bg-[#4318FF] text-white flex items-center justify-center shadow-xs">
+                <Download className="w-4 h-4" />
+              </div>
+              <div className="text-left">
+                <span className="text-xs sm:text-sm font-black text-slate-900 block group-hover:text-[#4318FF] transition-colors">
+                  {isInstalled ? "Application installée ✓" : "Installer l'application"}
+                </span>
+                <span className="text-[11px] text-slate-500 font-normal">
+                  {isInstalled ? "Accessible depuis votre écran d'accueil" : "Android, iOS, Mac, Windows & Linux"}
+                </span>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-[#4318FF]" />
           </button>
 
           {/* Paramètres */}

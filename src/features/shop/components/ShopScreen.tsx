@@ -117,8 +117,8 @@ export const ShopScreen: React.FC<ShopScreenProps> = ({
     setCurrentSubView('payment_method');
   };
 
-  // Pay order
-  const handlePayOrder = (method: 'wave' | 'orange_money') => {
+  // Pay / Order validation via WhatsApp
+  const handlePayOrder = (method: 'whatsapp' = 'whatsapp') => {
     const subtotal = cart.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
       0
@@ -146,7 +146,7 @@ export const ShopScreen: React.FC<ShopScreenProps> = ({
       status: 'in_delivery',
       timeline: [
         {
-          title: 'Paiement reçu',
+          title: 'Commande validée sur WhatsApp',
           time: new Date().toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
@@ -169,7 +169,7 @@ export const ShopScreen: React.FC<ShopScreenProps> = ({
 
     setCurrentOrder(newOrder);
     setCurrentSubView('payment_success');
-    onShowToast('Paiement validé ✅', 'Votre commande #COM_0001 est confirmée !');
+    onShowToast('Commande envoyée sur WhatsApp 💬', 'Votre commande #COM_0001 est en cours de traitement !');
   };
 
   return (
@@ -209,7 +209,7 @@ export const ShopScreen: React.FC<ShopScreenProps> = ({
         />
       )}
 
-      {/* 4. Payment Method Screen */}
+      {/* 4. Payment Method / WhatsApp Checkout Screen */}
       {currentSubView === 'payment_method' && (
         <PaymentMethodScreen
           totalAmount={
@@ -218,6 +218,8 @@ export const ShopScreen: React.FC<ShopScreenProps> = ({
               0
             ) + 2000 || 89500
           }
+          items={cart}
+          orderNumber={currentOrder.orderNumber}
           onBack={() => setCurrentSubView('cart')}
           onPay={handlePayOrder}
         />
