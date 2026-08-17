@@ -1,0 +1,7 @@
+{
+  "name": "Barber & Salon - Gestion de file d'attente",
+  "description": "Application mobile de prise de tickets et gestion de file d'attente pour salons et barbiers avec suivi en temps réel et gestion des proches.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
